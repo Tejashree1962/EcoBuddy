@@ -29,10 +29,10 @@ EMISSION_FACTORS = {
 st.title("🌍 EcoBuddy - Your AI Carbon Footprint Guide")
 
 # User Inputs
-travel_km = st.number_input("🚗 Daily Travel (km)", value=15.0)
-electricity_kwh = st.number_input("⚡ Monthly Electricity Usage (kWh)", value=350.0)
-meat_meals = st.number_input("🍗 Weekly Meat Meals", value=5.0)
-flights = st.number_input("✈️ Flights per Year", value=2.0)
+travel_km = st.number_input("🚗 Daily Travel (km)", value=15.0, min_value=0.0)
+electricity_kwh = st.number_input("⚡ Monthly Electricity Usage (kWh)", value=350.0, min_value=0.0)
+meat_meals = st.number_input("🍗 Weekly Meat Meals", value=5, min_value=0, step=1, format="%d")
+flights = st.number_input("✈️ Flights per Year", value=2, min_value=0, step=1, format="%d")
 shopping_freq = st.selectbox("🛒 Shopping Frequency", ["Rarely", "Monthly", "Weekly"])
 
 if st.button("Generate Report"):
