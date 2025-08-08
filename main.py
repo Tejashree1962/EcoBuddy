@@ -26,16 +26,20 @@ EMISSION_FACTORS = {
     }
 }
 
+# App Title
 st.title("🌍 EcoBuddy - Your AI Carbon Footprint Guide")
+st.markdown("Get a monthly estimate of your carbon emissions and AI-generated suggestions to reduce them.")
 
-# User Inputs
-travel_km = st.number_input("🚗 Daily Travel (km)", value=15.0, min_value=0.0)
-electricity_kwh = st.number_input("⚡ Monthly Electricity Usage (kWh)", value=350.0, min_value=0.0)
-meat_meals = st.number_input("🍗 Weekly Meat Meals", value=5, min_value=0, step=1, format="%d")
-flights = st.number_input("✈️ Flights per Year", value=2, min_value=0, step=1, format="%d")
-shopping_freq = st.selectbox("🛒 Shopping Frequency", ["Rarely", "Monthly", "Weekly"])
+# Sidebar Inputs
+st.sidebar.header("Enter your lifestyle data")
 
-if st.button("Generate Report"):
+travel_km = st.sidebar.number_input("🚗 Daily Travel (km)", value=15.0, min_value=0.0)
+electricity_kwh = st.sidebar.number_input("⚡ Monthly Electricity Usage (kWh)", value=350.0, min_value=0.0)
+meat_meals = st.sidebar.number_input("🍗 Weekly Meat Meals", value=5, min_value=0, step=1, format="%d")
+flights = st.sidebar.number_input("✈️ Flights per Year", value=2, min_value=0, step=1, format="%d")
+shopping_freq = st.sidebar.selectbox("🛒 Shopping Frequency", ["Rarely", "Monthly", "Weekly"])
+
+if st.sidebar.button("Generate Report"):
     car_emission = travel_km * 30 * EMISSION_FACTORS["car_per_km"]
     electricity_emission = electricity_kwh * EMISSION_FACTORS["electricity_per_kwh"]
     meat_emission = meat_meals * 4 * EMISSION_FACTORS["meat_meal"]
@@ -43,7 +47,7 @@ if st.button("Generate Report"):
     shopping_emission = EMISSION_FACTORS["shopping"][shopping_freq]
 
     total = car_emission + electricity_emission + meat_emission + flight_emission + shopping_emission
-    st.markdown(f"### Monthly Emissions: {round(total, 2)} kg CO₂")
+    st.markdown(f"### 💨 Estimated Monthly Emissions: `{round(total, 2)} kg CO₂`")
 
     # Gemini Prompt
     prompt = f"""
@@ -57,7 +61,7 @@ if st.button("Generate Report"):
 
     try:
         response = model.generate_content(prompt)
-        st.markdown("### Suggestions:")
+        st.markdown("### 🌿 Personalized Suggestions:")
         st.markdown(response.text.strip())
     except Exception as e:
-        st.error(f"Error from Gemini: {e}")
+        st.error(f"❌ Error from Gemini: {e}")
